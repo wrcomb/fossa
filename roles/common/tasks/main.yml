@@ -8,7 +8,7 @@
     - apt
     - apt_inst.cpython-38-x86_64-linux-gnu.so
     - apt_pkg.cpython-38-x86_64-linux-gnu.so
-  tags: ["apt"]
+  tags: ["common"]
 
 - name: Update system
   apt:
@@ -17,10 +17,10 @@
     cache_valid_time: 600
     upgrade: dist
   become: true
-  tags: ["apt"]
+  tags: ["common"]
 
 - name: Install common packages
   apt:
     name: "{{ common_package }}"
   become: true
-  tags: ["apt"]
+  tags: ["common"]

@@ -1,0 +1,25 @@
+---
+- name: install bash_it
+  git:
+    repo: https://github.com/Bash-it/bash-it.git
+    dest: "{{ ansible_env['HOME'] }}/.bash_it"
+  tags: ["bash"]
+
+- name: configure bash_it
+  blockinfile:
+    path: "{{ ansible_env['HOME'] }}/.bashrc_{{ ansible_env['USER'] }}"
+    insertafter: EOF
+    block: |
+      # bash_it
+      # If not running interactively, don't do anything
+      case $- in
+        *i*) ;;
+          *) return;;
+      esac
+
+      export BASH_IT="/home/{{ ansible_env['USER'] }}/.bash_it"
+      export BASH_IT_THEME='modern'
+      unset MAILCHECK
+      export SCM_CHECK=true
+      source "$BASH_IT"/bash_it.sh
+  tags: ["bash"]

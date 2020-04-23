@@ -40,15 +40,13 @@ sudo apt -y install build-essential libbz2-dev libffi-dev libreadline-dev libsql
 
 pyenv install ${python_version}
 
-if [[ -d ~/.pyenv/plugins ]]; then
-  cd .pyenv/plugins
+if [[ -d ~/.pyenv/plugins/pyenv-virtualenv ]]; then
+  cd .pyenv/plugins/pyenv-virtualenv
   git pull
   cd
 else
-  git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/
+  git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv
 fi
-
-pyenv-virtualenv
 
 echo '# pyenv-virtualenv activating'
 echo 'eval "$(pyenv virtualenv-init -)"' >> ${custom_bashrc}
@@ -67,3 +65,5 @@ set -o nounset
 
 pip install ansible
 ansible --version
+
+set +o errexit +o nounset +o xtrace
