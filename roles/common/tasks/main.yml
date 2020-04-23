@@ -31,3 +31,54 @@
     virtualenv_python: pyenv
     virtualenv: "{{ ansible_env['PYENV_VIRTUAL_ENV'] }}"
   tags: ["common", "python"]
+
+- name: Docker
+  debug:
+    msg: "Waiting Docker CE for Fossa"
+  tags: ["common"]
+
+- name: Check Microsoft key
+  stat:
+    path: /usr/share/keyrings/packages.microsoft.gpg
+  register: microsoft_key
+  tags: ["common"]
+
+- name: Install Microsoft key
+  block:
+    - name: Get Microsoft key
+      get_url:
+        url: https://packages.microsoft.com/keys/microsoft.asc
+        dest: "{{ ansible_env['HOME'] }}/microsoft.asc"
+        checksum: "{{ microsoft_checksum }}"
+      tags: ["common"]
+
+    - name: Unpack ASCII armor
+      command: gpg --dearmor "{{ ansible_env['HOME'] }}/microsoft.asc"
+      tags: ["common"]
+
+    - name: Copy Microsoft key
+      copy:
+        src: "{{ ansible_env['HOME'] }}/microsoft.asc.gpg"
+        dest: /usr/share/keyrings/packages.microsoft.gpg
+        mode: "0644"
+        group: root
+        owner: root
+      become: true
+      tags: ["common"]
+  when: not microsoft_key.stat.exists
+
+- name: Configure vscode repo
+  copy:
+    dest: /etc/apt/sources.list.d/vscode.list
+    content: >-
+      deb [arch=amd64 signed-by=/usr/share/keyrings/packages.microsoft.gpg]
+      https://packages.microsoft.com/repos/vscode stable main
+  become: true
+  tags: ["common"]
+
+- name: Install vscode
+  apt:
+    cache_valid_time: 600
+    name: code-insiders
+  become: true
+  tags: ["common"]

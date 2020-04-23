@@ -3,6 +3,7 @@
   git:
     repo: https://github.com/Bash-it/bash-it.git
     dest: "{{ ansible_env['HOME'] }}/.bash_it"
+    version: master
   tags: ["bash"]
 
 - name: configure bash_it
