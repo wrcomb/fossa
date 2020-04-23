@@ -31,12 +31,69 @@
   register: terminal_profiles
   tags: ["desktop"]
 
-- name: Configure GNOME Terminal profile name
+- name: Configure GNOME Terminal
   dconf:
     key: "/org/gnome/terminal/legacy/profiles:/\
-      {{ terminal_profiles['values'][0] }}visible-name"
-    value: "'{{ ansible_env['USER'] }}'"
+      {{ terminal_profiles['values'][0] }}{{ item.key }}"
+    value: "{{ item.value }}"
     state: present
+  loop:
+    - {key: visible-name, value: "'{{ ansible_env['USER'] }}'"}
+    - {key: background-color, value: "'rgb(0,0,0)'"}
+    - {key: foreground-color, value: "'rgb(255,255,255)'"}
+    - {key: use-theme-colors, value: "false"}
+  tags: ["desktop"]
+
+- name: Check SourceCodePro-Regular.otf
+  stat:
+    path: "{{ ansible_env['HOME'] }}/.fonts/SourceCodePro-Regular.otf"
+  register: source_code_pro
+  tags: ["desktop"]
+
+- name: Install source-code-pro
+  block:
+    - name: Download source-code-pro
+      git:
+        repo: https://github.com/adobe-fonts/source-code-pro.git
+        dest: "{{ ansible_env['HOME'] }}/.source-code-pro"
+        version: release
+        depth: 1
+      tags: ["desktop"]
+
+    - name: Create .fonts
+      file:
+        dest: "{{ ansible_env['HOME'] }}/.fonts"
+        state: directory
+      tags: ["desktop"]
+
+    - name: Copy OTF files
+      copy:
+        src: "{{ item }}"
+        dest: "{{ ansible_env['HOME'] }}/.fonts/{{ item | basename }}"
+        remote_src: true
+      loop: "{{ q('fileglob', ansible_env['HOME']+'/.source-code-pro/OTF/*') }}"
+      tags: ["desktop"]
+
+    - name: Build font cache
+      command: fc-cache -f -v
+      tags: ["desktop"]
+  when: not source_code_pro.stat.exists
+
+- name: Remove source-code-pro release
+  file:
+    path: "{{ ansible_env['HOME'] }}/.source-code-pro"
+    state: absent
+  tags: ["desktop"]
+
+- name: Configure GNOME Terminal fonts
+  dconf:
+    key: "/org/gnome/terminal/legacy/profiles:/\
+      {{ terminal_profiles['values'][0] }}{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - {key: font, value: "'Source Code Pro Medium 12'"}
+    - {key: use-system-font, value: "false"}
   tags: ["desktop"]
 
 - name: Configure hidden files

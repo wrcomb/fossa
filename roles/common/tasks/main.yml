@@ -65,6 +65,14 @@
         owner: root
       become: true
       tags: ["common"]
+
+    - name: Remove temporary files
+      file:
+        path: "{{ item }}"
+      loop:
+        - "{{ ansible_env['HOME'] }}/microsoft.asc"
+        - "{{ ansible_env['HOME'] }}/microsoft.asc.gpg"
+      tags: ["common"]
   when: not microsoft_key.stat.exists
 
 - name: Configure vscode repo
