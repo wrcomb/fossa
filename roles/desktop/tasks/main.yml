@@ -1,0 +1,29 @@
+---
+- name: Configure favorite-apps
+  dconf:
+    key: /org/gnome/shell/favorite-apps
+    value: "['org.gnome.Nautilus.desktop']"
+    state: present
+  tags: ["desktop"]
+
+- name: Configure background
+  dconf:
+    key: /org/gnome/desktop/background/picture-uri
+    value: "'file:///usr/share/backgrounds/Sky_Sparkles_by_Joe_Thompson.jpg'"
+    state: present
+  tags: ["desktop"]
+
+- name: Configure hidden files
+  blockinfile:
+    path: "{{ ansible_env['HOME'] }}/.hidden"
+    block: |
+      Desktop
+      Documents
+      Downloads
+      Music
+      Pictures
+      Public
+      Templates
+      Videos
+    create: true
+  tags: ["desktop"]

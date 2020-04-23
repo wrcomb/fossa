@@ -8,7 +8,7 @@
     - apt
     - apt_inst.cpython-38-x86_64-linux-gnu.so
     - apt_pkg.cpython-38-x86_64-linux-gnu.so
-  tags: ["common"]
+  tags: ["common", "python"]
 
 - name: Update system
   apt:
@@ -24,3 +24,10 @@
     name: "{{ common_package }}"
   become: true
   tags: ["common"]
+
+- name: Install python packages into ansible virtualenv
+  pip:
+    name: psutil
+    virtualenv_python: pyenv
+    virtualenv: "{{ ansible_env['PYENV_VIRTUAL_ENV'] }}"
+  tags: ["common", "python"]

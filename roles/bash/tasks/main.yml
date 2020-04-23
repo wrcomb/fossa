@@ -18,7 +18,8 @@
       esac
 
       export BASH_IT="/home/{{ ansible_env['USER'] }}/.bash_it"
-      export BASH_IT_THEME='modern'
+      #export BASH_IT_THEME='modern'
+      export BASH_IT_THEME='powerline'
       unset MAILCHECK
       export SCM_CHECK=true
       source "$BASH_IT"/bash_it.sh
