@@ -8,8 +8,32 @@
 
 - name: Configure background
   dconf:
-    key: /org/gnome/desktop/background/picture-uri
-    value: "'file:///usr/share/backgrounds/Sky_Sparkles_by_Joe_Thompson.jpg'"
+    key: /org/gnome/desktop/background/{{ item.key }}
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - { key: primary-color, value: "'#000000'" }
+    - { key: secondary-color, value: "'#000000'" }
+    - { key: picture-options, value: "'none'" }
+  tags: ["desktop"]
+
+- name: Copy patched dconf module
+  copy:
+    src: plugins/dconf.py
+    dest: "{{ ansible_env['PYENV_VIRTUAL_ENV'] }}/lib/python3.8/site-packages/ansible/modules/system/"
+  tags: ["desktop"]
+
+- name: List terminal profile
+  dconf:
+    key: "/org/gnome/terminal/legacy/profiles:/"
+    state: list
+  register: terminal_profiles
+  tags: ["desktop"]
+
+- name: Configure GNOME Terminal profile name
+  dconf:
+    key: /org/gnome/terminal/legacy/profiles:/{{ terminal_profiles['values'][0] }}visible-name
+    value: "'{{ ansible_env['USER'] }}'"
     state: present
   tags: ["desktop"]
 
