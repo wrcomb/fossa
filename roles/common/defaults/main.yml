@@ -1,0 +1,6 @@
+---
+common_package:
+  - git
+  - chromium-browser
+  - pass
+  - vim

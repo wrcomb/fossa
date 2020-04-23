@@ -1,0 +1,26 @@
+---
+- name: Copy apt module
+  copy:
+    src: /usr/lib/python3/dist-packages/{{ item }}
+    dest: "{{ ansible_env['PYENV_VIRTUAL_ENV'] }}/lib/python3.8/site-packages"
+    remote_src: true
+  loop:
+    - apt
+    - apt_inst.cpython-38-x86_64-linux-gnu.so
+    - apt_pkg.cpython-38-x86_64-linux-gnu.so
+  tags: ["apt"]
+
+- name: Update system
+  apt:
+    autoclean: true
+    autoremove: true
+    cache_valid_time: 600
+    upgrade: dist
+  become: true
+  tags: ["apt"]
+
+- name: Install common packages
+  apt:
+    name: "{{ common_package }}"
+  become: true
+  tags: ["apt"]
