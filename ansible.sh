@@ -34,7 +34,7 @@ echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ${custom_bashrc}
 echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n  eval "$(pyenv init -)"\nfi' >> ${custom_bashrc}
 
 echo "Install dependencies"
-sudo apt -y install build-essential libbz2-dev libffi-dev libreadline-dev libsqlite3-dev libssl-dev llvm zlib1g-dev
+sudo apt -y install build-essential libbz2-dev libffi-dev libncurses5-dev libreadline-dev libsqlite3-dev libssl-dev llvm zlib1g-dev
 
 . ${custom_bashrc}
 
@@ -65,5 +65,7 @@ set -o nounset
 
 pip install ansible
 ansible --version
+
+cp -v fossa/files/plugins/dconf.py ${PYENV_VIRTUAL_ENV}/lib/python3.8/site-packages/ansible/modules/system
 
 set +o errexit +o nounset +o xtrace
