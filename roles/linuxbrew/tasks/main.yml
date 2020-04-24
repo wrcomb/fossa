@@ -1,0 +1,33 @@
+---
+- name: Install linuxbrew
+  git:
+    repo: https://github.com/Homebrew/brew
+    dest: "{{ ansible_env['HOME'] }}/.linuxbrew/Homebrew"
+    version: master
+  tags: ["linuxbrew"]
+
+- name: Create .fonts
+  file:
+    dest: "{{ ansible_env['HOME'] }}/.linuxbrew/bin"
+    state: directory
+  tags: ["linuxbrew"]
+
+- name: Create symlink
+  file:
+    src: "{{ ansible_env['HOME'] }}/.linuxbrew/Homebrew/bin/brew"
+    dest: "{{ ansible_env['HOME'] }}/.linuxbrew/bin/brew"
+    state: link
+  tags: ["linuxbrew"]
+
+- name: Configure .bashrc
+  lineinfile:
+    path: "{{ ansible_env['HOME'] }}/.bashrc_{{ ansible_env['USER'] }}"
+    insertbefore: "# bash_it"
+    line: "eval $(~/.linuxbrew/bin/brew shellenv)"
+  tags: ["linuxbrew"]
+
+- name: Install brew packages
+  homebrew:
+    name: "{{ linuxbrew_packages }}"
+  tags: ["linuxbrew"]
+

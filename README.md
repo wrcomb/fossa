@@ -23,3 +23,7 @@ ansible-playbook step2.yml -K
 
  - [ ] Waiting https://download.docker.com/linux/ubuntu/dists/fossa
  - [ ] Create a GNOME Terminal profile dconf directory automatically
+
+ ## Step 0
+
+Configure bluetooth mouse

@@ -17,6 +17,16 @@
     - {key: picture-options, value: "'none'"}
   tags: ["desktop"]
 
+- name: Configure GNOME
+  dconf:
+    key: /org/gnome/{{ item.key }}
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - {key: desktop/interface/gtk-theme, value: "'Yaru-dark'"}
+    - {key: shell/extensions/dash-to-dock/dock-fixed, value: "false"}
+  tags: ["desktop"]
+
 - name: Copy patched dconf module
   copy:
     src: plugins/dconf.py
@@ -92,7 +102,7 @@
     value: "{{ item.value }}"
     state: present
   loop:
-    - {key: font, value: "'Source Code Pro Medium 12'"}
+    - {key: font, value: "'Source Code Pro Medium 11'"}
     - {key: use-system-font, value: "false"}
   tags: ["desktop"]
 

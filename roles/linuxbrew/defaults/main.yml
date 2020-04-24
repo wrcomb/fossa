@@ -1,0 +1,4 @@
+---
+linuxbrew_packages:
+  - go
+  - tmux
