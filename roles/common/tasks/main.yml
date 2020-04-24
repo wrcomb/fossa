@@ -90,3 +90,9 @@
     name: code-insiders
   become: true
   tags: ["common"]
+
+- name: Copy .gitconfig
+  copy:
+    src: gitconfig
+    dest: "{{ ansible_env['HOME'] }}/.gitconfig"
+  tags: ["bash"]

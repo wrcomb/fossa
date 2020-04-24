@@ -1,0 +1,10 @@
+[user]
+        name = Aleksandr Usov
+        email = wrcomb@gmail.com
+[core]
+        editor = vim
+#[credential]
+#        helper = cache --timeout=3600
+[alias]
+        aci = commit -a -v
+        ci = commit

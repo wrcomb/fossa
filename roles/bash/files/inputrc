@@ -1,0 +1,11 @@
+set enable-bracketed-paste on
+set blink-matching-paren on
+set colored-stats on
+set completion-ignore-case on
+set show-all-if-ambiguous on
+
+"\C-x\C-l": shell-expand-line
+"\C-x\C-h": history-expand-line
+
+"\e[A": history-search-backward
+"\e[B": history-search-forward

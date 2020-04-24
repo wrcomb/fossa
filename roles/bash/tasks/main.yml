@@ -1,12 +1,12 @@
 ---
-- name: install bash_it
+- name: Install bash_it
   git:
     repo: https://github.com/Bash-it/bash-it.git
     dest: "{{ ansible_env['HOME'] }}/.bash_it"
     version: master
   tags: ["bash"]
 
-- name: configure bash_it
+- name: Configure bash_it
   blockinfile:
     path: "{{ ansible_env['HOME'] }}/.bashrc_{{ ansible_env['USER'] }}"
     insertafter: EOF
@@ -24,4 +24,10 @@
       unset MAILCHECK
       export SCM_CHECK=true
       source "$BASH_IT"/bash_it.sh
+  tags: ["bash"]
+
+- name: Copy .inputrc
+  copy:
+    src: inputrc
+    dest: "{{ ansible_env['HOME'] }}/.inputrc"
   tags: ["bash"]
