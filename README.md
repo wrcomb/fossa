@@ -18,3 +18,6 @@ cd fossa
 pyenv activate ansible
 ansible-playbook step2.yml -K
 ```
+## TODO
+
+[] Waiting https://download.docker.com/linux/ubuntu/dists/fossa

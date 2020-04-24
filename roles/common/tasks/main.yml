@@ -27,9 +27,12 @@
 
 - name: Install python packages into ansible virtualenv
   pip:
-    name: psutil
+    name: "{{ item }}"
     virtualenv_python: pyenv
     virtualenv: "{{ ansible_env['PYENV_VIRTUAL_ENV'] }}"
+  loop:
+    - ansible-lint
+    - psutil
   tags: ["common", "python"]
 
 - name: Docker
@@ -95,4 +98,10 @@
   copy:
     src: gitconfig
     dest: "{{ ansible_env['HOME'] }}/.gitconfig"
+  tags: ["bash"]
+
+- name: Copy .vimrc
+  copy:
+    src: vimrc
+    dest: "{{ ansible_env['HOME'] }}/.vimrc"
   tags: ["bash"]
