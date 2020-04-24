@@ -20,10 +20,13 @@
   tags: ["linuxbrew"]
 
 - name: Configure .bashrc
-  lineinfile:
+  blockinfile:
     path: "{{ ansible_env['HOME'] }}/.bashrc_{{ ansible_env['USER'] }}"
-    insertbefore: "# bash_it"
-    line: "eval $(~/.linuxbrew/bin/brew shellenv)"
+    insertbefore: "# bash_it ANSIBLE MANAGED BLOCK"
+    marker_begin: linuxbrew
+    block: |
+      eval $(~/.linuxbrew/bin/brew shellenv)
+      source ~/.linuxbrew/Homebrew/completions/bash/brew
   tags: ["linuxbrew"]
 
 - name: Install brew packages

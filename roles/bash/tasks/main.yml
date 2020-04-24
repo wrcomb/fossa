@@ -10,8 +10,8 @@
   blockinfile:
     path: "{{ ansible_env['HOME'] }}/.bashrc_{{ ansible_env['USER'] }}"
     insertafter: EOF
+    marker_begin: bash_it
     block: |
-      # bash_it
       # If not running interactively, don't do anything
       case $- in
         *i*) ;;
@@ -30,4 +30,21 @@
   copy:
     src: inputrc
     dest: "{{ ansible_env['HOME'] }}/.inputrc"
+  tags: ["bash"]
+
+- name: Configure bash_it plugins
+  shell: |
+    source "{{ ansible_env['HOME'] }}/.bash_it/bash_it.sh"
+    bash-it enable {{ item.command }}
+  args:
+    creates: /home/{{ ansible_env['USER'] }}/.bash_it/enabled/{{ item.name }}
+    executable: /bin/bash
+  loop:
+    - {name: "150---general.aliases.bash", command: "alias general"}
+    - {name: "150---homebrew.aliases.bash", command: "alias homebrew"}
+    - {name: "250---base.plugin.bash", command: "plugin base"}
+    - {name: "350---bash-it.completion.bash", command: "completion bash-it"}
+    - {name: "350---system.completion.bash", command: "completion system"}
+    - {name: "350---terraform.completion.bash", command: "completion terraform"}
+    - {name: "365---alias-completion.plugin.bash", command: "plugin alias-completion"}
   tags: ["bash"]
