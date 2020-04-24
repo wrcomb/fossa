@@ -1,0 +1,9 @@
+---
+- name: Add shotcut {{ key.key }}
+  dconf:
+    key: "/org/gnome/settings-daemon/plugins/\
+      media-keys/custom-keybindings/{{ key.key }}/{{ item.name }}"
+    value: "{{ item.value }}"
+    state: present
+  loop: "{{ key['values'] }}"
+  tags: ["desktop"]

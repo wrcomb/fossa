@@ -22,9 +22,7 @@
     key: /org/gnome/{{ item.key }}
     value: "{{ item.value }}"
     state: present
-  loop:
-    - {key: desktop/interface/gtk-theme, value: "'Yaru-dark'"}
-    - {key: shell/extensions/dash-to-dock/dock-fixed, value: "false"}
+  loop: "{{ gnome_configuration }}"
   tags: ["desktop"]
 
 - name: Copy patched dconf module
@@ -119,4 +117,11 @@
       Templates
       Videos
     create: true
+  tags: ["desktop"]
+
+- name: Add shortcuts
+  include_tasks: add_shortcut.yml
+  loop: "{{ shortcuts }}"
+  loop_control:
+    loop_var: key
   tags: ["desktop"]

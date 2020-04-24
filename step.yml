@@ -1,5 +1,5 @@
 ---
-- name: Step 2
+- name: Ansible configuration
   hosts: localhost
   connection: local
   roles:

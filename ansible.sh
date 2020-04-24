@@ -34,7 +34,9 @@ echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ${custom_bashrc}
 echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n  eval "$(pyenv init -)"\nfi' >> ${custom_bashrc}
 
 echo "Install dependencies"
-sudo apt -y install build-essential libbz2-dev libffi-dev libncurses5-dev libreadline-dev libsqlite3-dev libssl-dev llvm zlib1g-dev
+sudo apt -y install build-essential libbz2-dev libffi-dev liblzma-dev\
+  libncurses5-dev libreadline-dev libsqlite3-dev libssl-dev libxml2-dev\
+  libxmlsec1-dev llvm tk-dev zlib1g-dev
 
 . ${custom_bashrc}
 

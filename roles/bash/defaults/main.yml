@@ -1,0 +1,12 @@
+---
+bashit_plugins:
+  - {name: "150---general.aliases.bash", command: "alias general"}
+  - {name: "150---homebrew.aliases.bash", command: "alias homebrew"}
+  - {name: "250---base.plugin.bash", command: "plugin base"}
+  - {name: "350---bash-it.completion.bash", command: "completion bash-it"}
+  - {name: "350---system.completion.bash", command: "completion system"}
+  - {name: "350---terraform.completion.bash", command: "completion terraform"}
+  - {
+    name: "365---alias-completion.plugin.bash",
+    command: "plugin alias-completion"
+  }

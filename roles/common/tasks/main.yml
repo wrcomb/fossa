@@ -35,10 +35,15 @@
     - psutil
   tags: ["common", "python"]
 
-- name: Docker
+- name: Install Docker
   debug:
     msg: "Waiting Docker CE for Fossa"
-  tags: ["common"]
+  tags: ["common", "todo"]
+
+- name: Install VirtualBox
+  debug:
+    msg: "Waiting VirtualBox for Fossa"
+  tags: ["common", "todo"]
 
 - name: Check Microsoft key
   stat:
@@ -72,6 +77,7 @@
     - name: Remove temporary files
       file:
         path: "{{ item }}"
+        state: absent
       loop:
         - "{{ ansible_env['HOME'] }}/microsoft.asc"
         - "{{ ansible_env['HOME'] }}/microsoft.asc.gpg"

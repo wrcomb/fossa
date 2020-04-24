@@ -10,7 +10,9 @@
   blockinfile:
     path: "{{ ansible_env['HOME'] }}/.bashrc_{{ ansible_env['USER'] }}"
     insertafter: EOF
-    marker_begin: bash_it
+    marker_begin: bash_it_begin
+    marker_end: bash_it_end
+    marker: "# {mark}"
     block: |
       # If not running interactively, don't do anything
       case $- in
@@ -19,7 +21,6 @@
       esac
 
       export BASH_IT="/home/{{ ansible_env['USER'] }}/.bash_it"
-      #export BASH_IT_THEME='modern'
       export BASH_IT_THEME='powerline'
       unset MAILCHECK
       export SCM_CHECK=true
@@ -39,12 +40,5 @@
   args:
     creates: /home/{{ ansible_env['USER'] }}/.bash_it/enabled/{{ item.name }}
     executable: /bin/bash
-  loop:
-    - {name: "150---general.aliases.bash", command: "alias general"}
-    - {name: "150---homebrew.aliases.bash", command: "alias homebrew"}
-    - {name: "250---base.plugin.bash", command: "plugin base"}
-    - {name: "350---bash-it.completion.bash", command: "completion bash-it"}
-    - {name: "350---system.completion.bash", command: "completion system"}
-    - {name: "350---terraform.completion.bash", command: "completion terraform"}
-    - {name: "365---alias-completion.plugin.bash", command: "plugin alias-completion"}
-  tags: ["bash"]
+  loop: "{{ bashit_plugins }}"
+  tags: ["bash","step3"]
