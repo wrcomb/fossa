@@ -31,8 +31,8 @@ cd fossa && ansible-playbook step.yml -K -t step3
 
 ## TODO
 
- - [ ] Waiting https://download.docker.com/linux/ubuntu/dists/fossa
- - [ ] Waiting https://download.virtualbox.org/virtualbox/debian/dists/fossa
+ - [ ] Waiting https://download.docker.com/linux/ubuntu/dists/focal
+ - [ ] Waiting https://download.virtualbox.org/virtualbox/debian/dists/focal
  - [ ] Create a GNOME Terminal profile dconf directory automatically
 
  ## Step 0

@@ -1,0 +1,10 @@
+---
+vscode_plugings:
+  - {
+    name: ms-python.python,
+    path: ms-python.python-2020.4.74986
+  }
+  - {
+    name: golang.go-nightly,
+    path: golang.go-nightly-2020.4.2309
+  }
