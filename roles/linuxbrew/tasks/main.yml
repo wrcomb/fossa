@@ -34,4 +34,4 @@
 - name: Install brew packages
   homebrew:
     name: "{{ linuxbrew_packages }}"
-  tags: ["linuxbrew","step3"]
+  tags: ["linuxbrew", "step3"]

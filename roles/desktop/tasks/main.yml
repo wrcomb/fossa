@@ -128,9 +128,11 @@
 
 - name: Create custom-keybindings key
   set_fact:
-    custom_keybindings: "{{ custom_keybindings|default([]) + ['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/'+item.key+'/'] }}"
+    custom_keybindings: "{{ custom_keybindings|default([]) +
+      ['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/' +
+      item.key + '/'] }}"
   loop: "{{ shortcuts }}"
-  tags: ["desktop","foo"]
+  tags: ["desktop"]
 
 - name: Configure custom-keybindings
   dconf:
@@ -138,4 +140,4 @@
       custom-keybindings"
     value: "{{ custom_keybindings }}"
     state: present
-  tags: ["desktop","foo"]
+  tags: ["desktop"]
