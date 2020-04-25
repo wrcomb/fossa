@@ -42,3 +42,20 @@
     executable: /bin/bash
   loop: "{{ bashit_plugins }}"
   tags: ["bash", "step3"]
+
+- name: Configure .bashrc
+  blockinfile:
+    path: "{{ ansible_env['HOME'] }}/.bashrc_{{ ansible_env['USER'] }}"
+    insertbefore: "^# bash_it_begin"
+    marker_begin: bashrc_begin
+    marker_end: bashrc_end
+    marker: "# {mark}"
+    block: |
+      source {{ ansible_env['HOME'] }}/.bashrc_functions
+  tags: ["bash"]
+
+- name: Copy .bashrc_functions
+  template:
+    src: bashrc_functions.j2
+    dest: "{{ ansible_env['HOME'] }}/.bashrc_functions"
+  tags: ["bash"]

@@ -22,7 +22,7 @@
 - name: Configure .bashrc
   blockinfile:
     path: "{{ ansible_env['HOME'] }}/.bashrc_{{ ansible_env['USER'] }}"
-    insertbefore: "^# bash_it_begin"
+    insertbefore: "^# bashrc_begin"
     marker_begin: linuxbrew_begin
     marker_end: linuxbrew_end
     marker: "# {mark}"
