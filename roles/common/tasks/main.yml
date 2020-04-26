@@ -33,6 +33,8 @@
   loop:
     - ansible-lint
     - psutil
+    - pycodestyle
+    - pylint
   tags: ["common", "python"]
 
 - name: Install Docker
