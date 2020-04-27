@@ -3,8 +3,11 @@ common_package:
   - git
   - chromium-browser
   - curl
+  - gnupg2
   - pass
   - vim
 
 microsoft_checksum: >-
   sha256:2cfd20a306b2fa5e25522d78f2ef50a1f429d35fd30bd983e2ebffc2b80944fa
+
+backup_dir: /var/backup

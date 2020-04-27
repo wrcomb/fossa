@@ -95,3 +95,7 @@
     src: tmux.conf.local
     dest: "{{ ansible_env['HOME'] }}/.tmux.conf.local"
   tags: ["common"]
+
+- name: Restore files
+  include_tasks: restore.yml
+  tags: ["common", "restore"]

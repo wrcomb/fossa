@@ -2,8 +2,9 @@
 gnome_configuration:
   - {key: desktop/interface/gtk-theme, value: "'Yaru-dark'"}
   - {key: shell/extensions/dash-to-dock/dock-fixed, value: "false"}
-  - {key: org/gnome/desktop/notifications/show-in-lock-screen, value: "false"}
+  - {key: desktop/notifications/show-in-lock-screen, value: "false"}
   - {key: desktop/search-providers/disable-external, value: "true"}
+  - {key: settings/file-chooser/show-hidden, value: "false"}
   - {
     key: desktop/input-sources/sources,
     value: "[('xkb', 'us'), ('xkb', 'ru')]"

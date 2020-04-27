@@ -146,6 +146,53 @@ function wlh() {
   wl|head -n 20
 }
 
+function wbackup() {
+  [[ $# -ne 0 ]] && { echo "Usage: wbackup"; return 1; }
+  echo "Starting backup...."
+  for dir in ${HOME}/.mozilla/firefox/*-release
+  do
+    FOX="${dir}"
+  done
+  echo "Firefox is ${FOX}"
+  local backup_name="backup_$(date +%F).tar.gz"
+  sudo tar -zcf "/tmp/${backup_name}" "${HOME}/new" "${WORDS}" "${PAGES}" "${FOX}" "${HOME}/.password-store"
+  sudo chown wrcomb: "/tmp/${backup_name}"
+  echo "Done: /tmp/${backup_name}"
+}
+
+function wrestore() {
+  [[ $1 != "yes" ]] && return
+  for dir in ${HOME}/.mozilla/firefox/*-release
+  do
+    FOX="${dir}"
+  done
+  for dir in ${BACKUP}${HOME}/.mozilla/firefox/*-release
+  do
+    BFOX="${dir}"
+  done
+  echo $FOX $BFOX
+  # RM
+  [[ -d "${HOME}/.new.old" ]] && rm -rf "${HOME}/.new.old"
+  [[ -d "${MOIN}/.words.old" ]] && sudo rm -rf "${MOIN}/.words.old"
+  [[ -d "${MOIN}/wiki/data/pages.old" ]] && sudo -u www-data rm -rf "${MOIN}/wiki/data/pages.old"
+  [[ -d "${FOX}.old" ]] && rm -rf "${FOX}.old"
+  [[ -d "${HOME}/.password-store.old" ]] && rm -rf "${HOME}/.password-store.old"
+  # MV
+  sudo -u www-data mv "${WORDS}" "${MOIN}/.words.old"
+  sudo -u www-data mv "${PAGES}" "${MOIN}/wiki/data/pages.old"
+  mv "${HOME}/new" "${HOME}/.new.old"
+  mv "${FOX}" "${FOX}.old"
+  mv "${HOME}/.password-store" "${HOME}/.password-store.old"
+  # RE
+  sudo mv "${BACKUP}${WORDS}" "${MOIN}/"
+  sudo mv "${BACKUP}${PAGES}" "${MOIN}/wiki/data/"
+  sudo chown www-data: -R "${WORDS}" "${PAGES}"
+  sudo chown wrcomb: -R "${WORDS}/list" "${WORDS}/sorted_list" "${WORDS}/.git"
+  mv "${BACKUP}${HOME}/new" "${HOME}/"
+  mv "${BFOX}" "${FOX}"
+  mv "${BACKUP}${HOME}/.password-store" "${HOME}/"
+}
+
 function wrealign() {
   [[ $# -ne 0 ]] && { echo "Usage: wrealign"; return 1; }
   wl > "${WORDS}/temp_list"

@@ -4,7 +4,7 @@ set -o errexit -o nounset -o xtrace
 
 source ansible.sh
 
-cd ~/fossa && ansible-playbook step.yml -K --skip-tags step3
+cd ~/fossa && ansible-playbook step.yml -K --skip-tags step3,restore
 
 source ~/.bashrc
 
