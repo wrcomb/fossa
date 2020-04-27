@@ -1,0 +1,176 @@
+# functions
+function aptu() {
+  [[ $# -ne 0 ]] && { echo "Usage: aptu"; return 1; } 
+  sudo apt update && sudo apt -y dist-upgrade && sudo apt -y autoremove && sudo apt autoclean
+}
+
+function wcc() {
+  [[ $# -ne 1 ]] && { echo "Usage: wcc word"; return 1; }
+  local word="${1}"
+  [[ ${#word} -lt 2 ]] && { echo "Word is too short"; return 2; }
+  local l1=$(echo ${word:0:1}|tr 'a-z' 'A-Z')
+  local l2=$(echo ${word:1:1}|tr 'a-z' 'A-Z')
+  local dir="${ENGLISH}${l1}(2f)${l2}"
+  [[ ! -d $dir ]] && return 3
+  local version=$(sudo -u www-data cat "${dir}/current")
+  local file="${dir}/revisions/${version}"
+  sudo -u www-data grep -Ei "^ \* '''${word}''' - " "${file}"
+  grep -Ei "^${word}" "${WORDS}/${l1}"
+}
+
+function wcheck() {
+  [[ $# -ne 0 ]] && { echo "Usage: wcheck"; return 1; }
+  for dir in ${ENGLISH}?\(2f\)?
+  do
+    local version=$(sudo -u www-data cat "${dir}/current")
+    local file="${dir}/revisions/${version}"
+    local old_word=""
+    local word=""
+    local old_header=""
+    local header=""
+    local words_count=0
+    while IFS= read -r line
+    do
+      echo "$line"|grep -Eiq "^ \* '''"
+      if [[ $? -eq 0 ]]; then
+        old_word="${word}"
+        word=$(echo $line|cut -f 4 -d\'|tr ' ' '1'|tr '-' '2')
+        if [[ $word < $old_word ]]; then
+          echo "Error order: $word < $old_word"
+        fi
+        echo ${word}|grep -Eiq "^!?${header/-/2}"
+        if [[ $? -ne 0 && ${#word} -gt 1 && ${word:1:1} != "1" ]]; then
+          echo "Error header: $header $word"
+        fi
+        words_count=$((words_count+1))
+        if [[ $words_count -gt 12 ]]; then
+          echo "Error count: $header"
+        fi
+      fi
+      echo "$line"|grep -Eiq "^="
+      if [[ $? -eq 0 ]]; then
+        old_header="${header}"
+        header=$(echo $line|awk '{print $2}'|tr '-' '2'|tr -d "'")
+        if [[ $header < $old_header ]]; then
+          echo "Error order: $header < $old_header"
+        fi
+        words_count=0
+      fi
+      echo "${line}"|grep -Eiq " \* '''[a-z0-9-]+''''" && echo "Error line: $line"
+    done < <(sudo -u www-data cat "${file}")
+  done
+}
+
+function wcount() {
+  local sum=0
+  [[ $# -ne 0 ]] && { echo "Usage: wcount"; return 1; }
+  for dir in ${ENGLISH}?\(2f\)?
+  do
+    version=$(sudo -u www-data cat "${dir}/current")
+    file="${dir}/revisions/${version}"
+    num=$(sudo -u www-data grep -cEi "^ \* '''" "${file}")
+    sum=$((sum+num))
+  done
+  echo -e "\nNumber of words: ${sum}\n"
+}
+
+function we() {
+  [[ $# -ne 1 ]] && { echo "Usage: we letter"; return 1; }
+  local l1=$(echo ${1:0:1}|tr 'a-z' 'A-Z')
+  vim "${WORDS}/${l1}"
+}
+
+function wfa() {
+  [[ $# -ne 1 ]] && { echo "Usage: wfa article"; return 1; }
+  ls "$PAGES"|grep -Ei "$1"
+}
+
+function wi() {
+  [[ $# -ne 0 ]] && { echo "Usage: wi"; return 1; }
+  vim "${WORDS}/list"
+}
+
+function wl() {
+  [[ $# -ne 0 ]] && { echo "Usage: wl"; return 1; }
+  # remove BOM
+  sed -i '1s/^\xEF\xBB\xBF//' "${WORDS}/list"
+  cat "${WORDS}/list"|tr "!@#\$%^&*()_=+\\\|\`~[{]}:;'\",<.>/?" " "|tr "а-яА-Я" " "|tr "\t" " "|tr "—©’“”…ø–ˌˈ │" " "|tr "ÃáéàÆɒɪʊÉæāᵻō" " "|tr " " "\n"|sort|uniq > "${WORDS}/sorted_list"
+  for word in $(cat "${WORDS}/sorted_list"); do
+    [[ ${#word} -lt 2 ]] && continue
+    printf "%s" "${word}"|grep -Eiq "^[0-9-]+$" && continue
+    printf "%s" "${word}"|grep -Eiq "^-" && continue
+    l1=$(echo ${word:0:1}|tr 'a-z' 'A-Z')
+    l2=$(echo ${word:1:1}|tr 'a-z' 'A-Z')
+    grep -Eiq "^${word}$" "${WORDS}/${l1}" && continue
+    if [[ $l2 != "-" ]]; then
+      dir="${ENGLISH}${l1}(2f)${l2}"
+    else
+      dir="${ENGLISH}${l1}(2f2d)"
+    fi
+    [[ ! -d $dir ]] && { echo "${word}"; continue; }
+    version=$(sudo -u www-data cat "${dir}/current")
+    file="${dir}/revisions/${version}"
+    sudo -u www-data grep -Eiq "^ \* '''!?${word}''' - " "${file}" && continue
+    # -s
+    echo $word|grep -Eiq "s$" && sudo -u www-data grep -Eiq "^ \* '''${word%s}''' - " "${file}" && continue
+    echo $word|grep -Eiq "s$" && sudo -u www-data grep -Eiq "^ \* '''${word%S}''' - " "${file}" && continue
+    echo $word|grep -Eiq "ches$" && sudo -u www-data grep -Eiq "^ \* '''${word%es}''' - " "${file}" && continue
+    echo $word|grep -Eiq "ches$" && sudo -u www-data grep -Eiq "^ \* '''${word%ES}''' - " "${file}" && continue
+    echo $word|grep -Eiq "shes$" && sudo -u www-data grep -Eiq "^ \* '''${word%es}''' - " "${file}" && continue
+    echo $word|grep -Eiq "shes$" && sudo -u www-data grep -Eiq "^ \* '''${word%ES}''' - " "${file}" && continue
+    echo $word|grep -Eiq "oes$" && sudo -u www-data grep -Eiq "^ \* '''${word%es}''' - " "${file}" && continue
+    echo $word|grep -Eiq "oes$" && sudo -u www-data grep -Eiq "^ \* '''${word%ES}''' - " "${file}" && continue
+    echo $word|grep -Eiq "ses$" && sudo -u www-data grep -Eiq "^ \* '''${word%es}''' - " "${file}" && continue
+    echo $word|grep -Eiq "ses$" && sudo -u www-data grep -Eiq "^ \* '''${word%ES}''' - " "${file}" && continue
+    echo $word|grep -Eiq "sses$" && sudo -u www-data grep -Eiq "^ \* '''${word%es}''' - " "${file}" && continue
+    echo $word|grep -Eiq "sses$" && sudo -u www-data grep -Eiq "^ \* '''${word%ES}''' - " "${file}" && continue
+    echo $word|grep -Eiq "xes$" && sudo -u www-data grep -Eiq "^ \* '''${word%es}''' - " "${file}" && continue
+    echo $word|grep -Eiq "xes$" && sudo -u www-data grep -Eiq "^ \* '''${word%ES}''' - " "${file}" && continue
+    echo $word|grep -Eiq "zzes$" && sudo -u www-data grep -Eiq "^ \* '''${word%es}''' - " "${file}" && continue
+    echo $word|grep -Eiq "zzes$" && sudo -u www-data grep -Eiq "^ \* '''${word%ES}''' - " "${file}" && continue
+    echo $word|grep -Eiq "zzes$" && sudo -u www-data grep -Eiq "^ \* '''${word%zes}''' - " "${file}" && continue
+    echo $word|grep -Eiq "ies$" && sudo -u www-data grep -Eiq "^ \* '''${word%ies}y''' - " "${file}" && continue
+    echo $word|grep -Eiq "ies$" && sudo -u www-data grep -Eiq "^ \* '''${word%IES}y''' - " "${file}" && continue
+    echo $word
+  done
+}
+
+function wlcount() {
+  [[ $# -ne 0 ]] && { echo "Usage: wlcount"; return 1; }
+  local sum=$(wl|wc -l)
+  echo -e "\nNumber of unknow words: $sum\n"
+}
+
+function wlh() {
+  [[ $# -ne 0 ]] && { echo "Usage: wlh"; return 1; }
+  wl|head -n 20
+}
+
+function wrealign() {
+  [[ $# -ne 0 ]] && { echo "Usage: wrealign"; return 1; }
+  wl > "${WORDS}/temp_list"
+  mv -v "${WORDS}/temp_list" "${WORDS}/list"
+}
+
+function wttr() {
+  curl http://wttr.in/?format=v2
+}
+
+# exports
+export HISTIGNORE="aptu:aptu :history:history *:man:man *:\
+wcc:wcc *:wcheck:wcheck :wcount:wcount :we:we *:wfa:wfa *:\
+wi:wi :wl:wl :wlcount:wlcount :wlh:wlh :wrealign:wrealign :\
+wttr:wttr "
+export BACKUP="/media/wrcomb/4TB/backup/dir"
+export MANWIDTH=80
+export MOIN="/srv/moin"
+export WORDS="${MOIN}/words"
+export PAGES="${MOIN}/wiki/data/pages"
+export ENGLISH="${PAGES}/English(2f)Dictionary(2f)"
+export GOPATH="${HOME}/go"
+export PATH="${PATH}:${GOPATH}/bin"
+
+# aliases
+alias ap=ansible-playbook
+alias k=kubectl
+alias tf=terraform

@@ -55,7 +55,7 @@
   tags: ["bash"]
 
 - name: Copy .bashrc_functions
-  template:
-    src: bashrc_functions.j2
+  copy:
+    src: bashrc_functions
     dest: "{{ ansible_env['HOME'] }}/.bashrc_functions"
   tags: ["bash"]

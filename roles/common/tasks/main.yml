@@ -75,3 +75,23 @@
     src: vimrc
     dest: "{{ ansible_env['HOME'] }}/.vimrc"
   tags: ["common"]
+
+- name: Install Oh My Tmux
+  git:
+    repo: https://github.com/gpakosz/.tmux.git
+    dest: "{{ ansible_env['HOME'] }}/.tmux"
+    version: master
+  tags: ["common"]
+
+- name: Create .tmux link
+  file:
+    src: "{{ ansible_env['HOME'] }}/.tmux/.tmux.conf"
+    dest: "{{ ansible_env['HOME'] }}/.tmux.conf"
+    state: link
+  tags: ["common"]
+
+- name: Copy .tmux.conf.local
+  copy:
+    src: tmux.conf.local
+    dest: "{{ ansible_env['HOME'] }}/.tmux.conf.local"
+  tags: ["common"]
