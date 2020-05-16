@@ -22,7 +22,6 @@
       godoctor"
   environment:
     GO111MODULE: "on"
-  tags: ["vscode", "go", "step3"]
 
 - name: Install Go tools (GOPATH mode)
   command: go get github.com/cweill/gotests/... \
@@ -33,4 +32,3 @@
       rogpeppe/godef/"
   environment:
     GO111MODULE: "off"
-  tags: ["vscode", "go", "step3"]

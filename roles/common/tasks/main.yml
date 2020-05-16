@@ -8,6 +8,7 @@
     - apt
     - apt_inst.cpython-38-x86_64-linux-gnu.so
     - apt_pkg.cpython-38-x86_64-linux-gnu.so
+    - aptsources
   tags: ["common", "python"]
 
 - name: Update system
@@ -30,11 +31,8 @@
     name: "{{ item }}"
     virtualenv_python: pyenv
     virtualenv: "{{ ansible_env['PYENV_VIRTUAL_ENV'] }}"
-  loop:
-    - ansible-lint
-    - psutil
-    - pycodestyle
-    - pylint
+  loop: "{{ pip_ansible }}"
+
   tags: ["common", "python"]
 
 - name: Install Docker
@@ -96,6 +94,11 @@
     dest: "{{ ansible_env['HOME'] }}/.tmux.conf.local"
   tags: ["common"]
 
+- name: Install Docker
+  import_tasks: docker.yml
+  become: yes
+  tags: ["common", "docker"]
+
 - name: Restore files
-  include_tasks: restore.yml
+  import_tasks: restore.yml
   tags: ["common", "restore"]

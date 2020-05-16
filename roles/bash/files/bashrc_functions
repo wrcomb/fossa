@@ -94,7 +94,7 @@ function wl() {
   [[ $# -ne 0 ]] && { echo "Usage: wl"; return 1; }
   # remove BOM
   sed -i '1s/^\xEF\xBB\xBF//' "${WORDS}/list"
-  cat "${WORDS}/list"|tr "!@#\$%^&*()_=+\\\|\`~[{]}:;'\",<.>/?" " "|tr "а-яА-Я" " "|tr "\t" " "|tr "—©’“”…ø–ˌˈ │" " "|tr "ÃáéàÆɒɪʊÉæāᵻō" " "|tr " " "\n"|sort|uniq > "${WORDS}/sorted_list"
+  cat "${WORDS}/list"|tr "!@#\$%^&*()_=+\\\|\`~[{]}:;'\",<.>/?" " "|tr "а-яА-Я" " "|tr "\t" " "|tr "—©’“”…ø–ˌ⁄ˈ │" " "|tr "ÃáéàÆɒɪʊÉæāᵻō" " "|tr " " "\n"|sort|uniq > "${WORDS}/sorted_list"
   for word in $(cat "${WORDS}/sorted_list"); do
     [[ ${#word} -lt 2 ]] && continue
     printf "%s" "${word}"|grep -Eiq "^[0-9-]+$" && continue
@@ -155,7 +155,7 @@ function wbackup() {
   done
   echo "Firefox is ${FOX}"
   local backup_name="backup_$(date +%F).tar.gz"
-  sudo tar -zcf "/tmp/${backup_name}" "${HOME}/new" "${WORDS}" "${PAGES}" "${FOX}" "${HOME}/.password-store"
+  sudo tar -zcf "/tmp/${backup_name}" "${HOME}/new" "${WORDS}" "${PAGES}" "${FOX}" "${HOME}/.password-store" "${HOME}/.ssh"
   sudo chown wrcomb: "/tmp/${backup_name}"
   echo "Done: /tmp/${backup_name}"
 }

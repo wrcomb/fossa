@@ -25,8 +25,8 @@
 
     - name: Import secret key
       command: gpg --import --batch {{ backup_dir }}/gpg.secret
-      tags: ["common", "restore"]
   when: gpg_key.rc != 0
+  tags: ["common", "restore"]
 
 - name: Restore new
   copy:
@@ -40,4 +40,23 @@
     src: "{{ backup_dir }}/moin"
     dest: /srv/moin
     remote_src: true
+  tags: ["common", "restore"]
+
+- name: Restore .ssh
+  copy:
+    src: "{{ backup_dir }}/.ssh"
+    dest: "{{ ansible_env['HOME'] }}/"
+    remote_src: true
+  tags: ["common", "restore"]
+
+- name: Restore .ssh permission
+  file:
+    src: "{{ ansible_env['HOME'] }}/.ssh"
+    mode: '0700'
+  tags: ["common", "restore"]
+
+- name: Restore id_rsa permission
+  file:
+    src: "{{ ansible_env['HOME'] }}/.ssh/id_rsa"
+    mode: '0600'
   tags: ["common", "restore"]

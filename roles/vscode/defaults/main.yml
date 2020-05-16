@@ -8,3 +8,7 @@ vscode_plugings:
     name: golang.go-nightly,
     path: golang.go-nightly-2020.4.2309
   }
+  - {
+    name: marp-team.marp-vscode,
+    path: marp-team.marp-vscode-0.13.0
+  }

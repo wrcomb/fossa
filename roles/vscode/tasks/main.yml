@@ -69,5 +69,5 @@
   tags: ["vscode"]
 
 - name: Install Go tools
-  include_tasks: go.yml
+  import_tasks: go.yml
   tags: ["vscode", "go", "step3"]
