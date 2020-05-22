@@ -27,3 +27,33 @@
     name: "{{ ansible_env['USER'] }}"
     groups: docker
     append: yes
+
+- name: Check /var/lib/docker
+  file:
+    path: /var/lib/docker
+  register: lib_docker
+
+- name: Configure /var/lib/docker
+  block:
+    - name: Stop docker
+      systemd:
+        name: docker
+        state: stopped
+    - name: Remove /var/lib/docker directory
+      file:
+        path: /var/lib/docker
+        state: absent
+    - name: Create /srv/docker
+      file:
+        path: /srv/docker
+        state: directory
+    - name: Create a symbolic link
+      file:
+        src: /srv/docker
+        dest: /var/lib/docker
+        state: link
+    - name: Start docker
+      systemd:
+        name: docker
+        state: started
+  when: lib_docker.state != "link"

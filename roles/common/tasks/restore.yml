@@ -4,18 +4,12 @@
     src: "{{ backup_dir }}/.password-store"
     dest: "{{ ansible_env['HOME'] }}/"
     remote_src: true
-  tags: ["common", "restore"]
 
 - name: Check GPG key
   command: gpg --list-key {{ ansible_env['USER'] }}@gmail.com
   register: gpg_key
   failed_when: false
   changed_when: false
-  tags: ["common", "restore"]
-
-- debug:
-    var: gpg_key
-  tags: ["common", "restore"]
 
 - name: Import GPG key
   block:
@@ -26,37 +20,38 @@
     - name: Import secret key
       command: gpg --import --batch {{ backup_dir }}/gpg.secret
   when: gpg_key.rc != 0
-  tags: ["common", "restore"]
 
 - name: Restore new
   copy:
     src: "{{ backup_dir }}/new"
     dest: "{{ ansible_env['HOME'] }}/"
     remote_src: true
-  tags: ["common", "restore"]
 
 - name: Restore moin
   copy:
     src: "{{ backup_dir }}/moin"
     dest: /srv/moin
     remote_src: true
-  tags: ["common", "restore"]
+
+- name: Restore moin permission
+  file:
+    path: /srv/moin
+    mode: '0775'
+    group: www-data
+    owner: www-data
 
 - name: Restore .ssh
   copy:
     src: "{{ backup_dir }}/.ssh"
     dest: "{{ ansible_env['HOME'] }}/"
     remote_src: true
-  tags: ["common", "restore"]
 
 - name: Restore .ssh permission
   file:
-    src: "{{ ansible_env['HOME'] }}/.ssh"
+    path: "{{ ansible_env['HOME'] }}/.ssh"
     mode: '0700'
-  tags: ["common", "restore"]
 
 - name: Restore id_rsa permission
   file:
-    src: "{{ ansible_env['HOME'] }}/.ssh/id_rsa"
+    path: "{{ ansible_env['HOME'] }}/.ssh/id_rsa"
     mode: '0600'
-  tags: ["common", "restore"]
