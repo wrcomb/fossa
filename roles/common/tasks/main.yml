@@ -96,8 +96,13 @@
 
 - name: Install Docker
   import_tasks: docker.yml
-  become: yes
+  become: "yes"
   tags: ["common", "docker"]
+
+- name: Install VirtualBox
+  import_tasks: virtualbox.yml
+  become: "yes"
+  tags: ["common", "virtualbox"]
 
 - name: Restore files
   import_tasks: restore.yml

@@ -1,0 +1,18 @@
+---
+- name: Install prerequisites
+  apt:
+    name:
+      - dkms
+    update_cache: "yes"
+
+- name: Add Docker GPG key
+  apt_key:
+    url: "{{ item }}"
+  loop:
+    - https://www.virtualbox.org/download/oracle_vbox.asc
+    - https://www.virtualbox.org/download/oracle_vbox_2016.asc
+
+- name: Add Docker APT repository
+  apt_repository:
+    repo: "deb [arch=amd64] http://download.virtualbox.org/virtualbox/\
+      debian {{ ansible_distribution_release }} contrib"
