@@ -5,14 +5,26 @@
       - dkms
     update_cache: "yes"
 
-- name: Add Docker GPG key
+- name: Add VirtualBox GPG key
   apt_key:
     url: "{{ item }}"
   loop:
     - https://www.virtualbox.org/download/oracle_vbox.asc
     - https://www.virtualbox.org/download/oracle_vbox_2016.asc
 
-- name: Add Docker APT repository
+- name: Add VirtualBox APT repository
   apt_repository:
     repo: "deb [arch=amd64] http://download.virtualbox.org/virtualbox/\
       debian {{ ansible_distribution_release }} contrib"
+
+- name: Install VirtualBox
+  apt:
+    name:
+      - virtualbox-6.1
+    update_cache: "yes"
+
+- name: Add to the vboxusers group
+  user:
+    name: "{{ ansible_env['USER'] }}"
+    groups: vboxusers
+    append: "yes"

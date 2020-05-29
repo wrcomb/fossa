@@ -3,7 +3,7 @@
 set -o errexit -o nounset -o xtrace
 
 readonly custom_bashrc="$HOME/.bashrc_$USER"
-readonly python_version="3.8.2"
+readonly python_version="3.8.3"
 readonly venv="ansible"
 
 echo "Installing git"

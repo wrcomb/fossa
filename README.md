@@ -31,10 +31,9 @@ cd fossa && ansible-playbook step.yml -K -t step3
 
 ## TODO
 
- - [ ] Waiting https://download.docker.com/linux/ubuntu/dists/focal
- - [ ] Waiting https://download.virtualbox.org/virtualbox/debian/dists/focal
  - [ ] Create a GNOME Terminal profile dconf directory automatically
  - [ ] Add documenration and support Python 2 into my vscode_extensions and push into community. Add vscode_command argument. Fix ansible-lint errros
+ - [ ] Build docker containers from ansible
 
  ## Step 0
 
