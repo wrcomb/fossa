@@ -32,18 +32,7 @@
     virtualenv_python: pyenv
     virtualenv: "{{ ansible_env['PYENV_VIRTUAL_ENV'] }}"
   loop: "{{ pip_ansible }}"
-
   tags: ["common", "python"]
-
-- name: Install Docker
-  debug:
-    msg: "Waiting Docker CE for Fossa"
-  tags: ["common", "todo"]
-
-- name: Install VirtualBox
-  debug:
-    msg: "Waiting VirtualBox for Fossa"
-  tags: ["common", "todo"]
 
 - name: Create venv38 virtualenv
   command: pyenv virtualenv venv38
