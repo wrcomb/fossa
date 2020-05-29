@@ -83,6 +83,16 @@
     dest: "{{ ansible_env['HOME'] }}/.tmux.conf.local"
   tags: ["common"]
 
+- name: Configure sudo
+  blockinfile:
+    path: "/etc/sudoers"
+    block: |
+      wrcomb  ALL=(ALL:ALL) NOPASSWD: /usr/bin/apt,/sbin/reboot,/sbin/shutdown
+      wrcomb  ALL=(www-data) NOPASSWD: ALL
+    validate: /usr/sbin/visudo -cf %s
+  become: "yes"
+  tags: ["common"]
+
 - name: Install Docker
   import_tasks: docker.yml
   become: "yes"
@@ -96,3 +106,4 @@
 - name: Restore files
   import_tasks: restore.yml
   tags: ["common", "restore"]
+
