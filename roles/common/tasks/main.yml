@@ -37,14 +37,14 @@
 - name: Create venv38 virtualenv
   command: pyenv virtualenv venv38
   args:
-    creates: "{{ ansible_env['HOME'] }}/.pyenv/versions/3.8.2/envs/venv38"
+    creates: "{{ ansible_env['HOME'] }}/.pyenv/versions/{{ ansible_env['ansible_python_version'] }}/envs/venv38"
   tags: ["common", "python"]
 
 - name: Install packages inside venv38 virtualenv
   pip:
     name: "{{ item }}"
     virtualenv_python: pyenv
-    virtualenv: "{{ ansible_env['HOME'] }}/.pyenv/versions/3.8.2/envs/venv38"
+    virtualenv: "{{ ansible_env['HOME'] }}/.pyenv/versions/{{ ansible_env['ansible_python_version'] }}/envs/venv38"
   loop:
     - boto3
     - pylint
