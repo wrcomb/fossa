@@ -22,9 +22,9 @@
 
 - name: Install common packages
   apt:
-    name: "{{ common_package }}"
+    name: "{{ common_packages + language_packages }}"
   become: true
-  tags: ["common"]
+  tags: ["common", "install"]
 
 - name: Install python packages into ansible virtualenv
   pip:
@@ -82,6 +82,13 @@
     src: tmux.conf.local
     dest: "{{ ansible_env['HOME'] }}/.tmux.conf.local"
   tags: ["common"]
+
+- name: Configure wiki hosts
+  lineinfile:
+    path: /etc/hosts
+    line: "127.0.0.2 wiki"
+  become: "yes"
+  tags: ["common", "wiki"]
 
 - name: Configure sudo
   blockinfile:

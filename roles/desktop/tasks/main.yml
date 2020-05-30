@@ -20,10 +20,10 @@
 - name: Configure GNOME
   dconf:
     key: /org/gnome/{{ item.key }}
-    value: "{{ item.value }}"
+    value: "{{ item.value | string }}"
     state: present
   loop: "{{ gnome_configuration }}"
-  tags: ["desktop"]
+  tags: ["desktop", "gnome"]
 
 - name: Copy patched dconf module
   copy:
@@ -50,6 +50,7 @@
     - {key: background-color, value: "'rgb(0,0,0)'"}
     - {key: foreground-color, value: "'rgb(255,255,255)'"}
     - {key: use-theme-colors, value: "false"}
+    - {key: audible-bell, value: "false"}
   tags: ["desktop"]
 
 - name: Check SourceCodePro-Regular.otf
@@ -112,13 +113,16 @@
       Documents
       Downloads
       fossa
+      go
       Music
+      new
       Pictures
       Public
+      snap
       Templates
       Videos
     create: true
-  tags: ["desktop"]
+  tags: ["desktop","hidden"]
 
 - name: Add shortcuts
   include_tasks: add_shortcut.yml

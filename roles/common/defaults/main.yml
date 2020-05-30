@@ -1,11 +1,37 @@
 ---
-common_package:
+common_packages:
   - git
   - chromium-browser
   - curl
   - gnupg2
   - pass
   - vim
+
+language_packages:
+  - chromium-browser-l10n
+  - hunspell-en-au
+  - hunspell-en-ca
+  - hunspell-en-gb
+  - hunspell-en-za
+  - hyphen-en-ca
+  - hyphen-en-gb
+  - libreoffice-help-en-gb
+  - libreoffice-l10n-en-gb
+  - libreoffice-l10n-en-za
+  - mythes-en-au
+  - thunderbird-locale-en-gb
+  - firefox-locale-ru
+  - language-pack-gnome-ru-base
+  - language-pack-ru
+  - language-pack-ru-base
+  - gnome-getting-started-docs-ru
+  - gnome-user-docs-ru
+  - hunspell-ru
+  - hyphen-ru
+  - libreoffice-help-ru
+  - libreoffice-l10n-ru
+  - mythes-ru
+  - thunderbird-locale-ru
 
 microsoft_checksum: >-
   sha256:2cfd20a306b2fa5e25522d78f2ef50a1f429d35fd30bd983e2ebffc2b80944fa
