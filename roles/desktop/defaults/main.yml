@@ -11,7 +11,7 @@ gnome_configuration:
   }
   - {key: desktop/privacy/remember-recent-files, value: "false"}
   - {key: desktop/screensaverlock-delay/lock-delay, value: "uint32 0"}
-  - {key: desktop/session/idle-delay, value: "uint32 300"}
+  - {key: desktop/session/idle-delay, value: "uint32 900"}
   - {
     key: settings-daemon/plugins/power/sleep-inactive-ac-timeout,
     value: "3600"

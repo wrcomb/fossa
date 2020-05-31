@@ -114,3 +114,16 @@
   import_tasks: restore.yml
   tags: ["common", "restore"]
 
+- name: Commit new
+  cron:
+    name: "commit new"
+    special_time: daily
+    job: "cd /home/wrcomb/new && git commit -a -m 'cron commit'"
+  tags: ["common", "cron"]
+
+- name: Commit words
+  cron:
+    name: "commit words"
+    special_time: daily
+    job: "cd /srv/moin/words && git commit -a -m 'cron commit'"
+  tags: ["common", "cron"]

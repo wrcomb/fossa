@@ -25,6 +25,12 @@
   loop: "{{ gnome_configuration }}"
   tags: ["desktop", "gnome"]
 
+- name: Configure bookmarks
+  copy:
+    src: bookmarks
+    dest: "{{ ansible_env['HOME'] }}/.config/gtk-3.0/bookmarks"
+  tags: ["desktop", "gnome"]
+
 - name: Copy patched dconf module
   copy:
     src: plugins/dconf.py
