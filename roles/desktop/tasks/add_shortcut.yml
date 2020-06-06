@@ -6,4 +6,4 @@
     value: "{{ item.value }}"
     state: present
   loop: "{{ key['values'] }}"
-  tags: ["desktop"]
+  tags: ["desktop", "shortcuts"]
