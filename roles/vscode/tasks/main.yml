@@ -71,3 +71,9 @@
 - name: Install Go tools
   import_tasks: go.yml
   tags: ["vscode", "go", "step3"]
+
+- name: Install MongoDB Compass
+  apt:
+    deb: "https://downloads.mongodb.com/compass/mongodb-compass_1.21.2_amd64.deb"
+  become: true
+  tags: ["mongodb"]

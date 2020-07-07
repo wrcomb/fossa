@@ -6,6 +6,7 @@ common_packages:
   - gnupg2
   - pass
   - vim
+  - vlc
 
 language_packages:
   - chromium-browser-l10n

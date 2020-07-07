@@ -2,13 +2,13 @@
 vscode_plugings:
   - {
     name: ms-python.python,
-    path: ms-python.python-2020.4.74986
+    path: ms-python.python-2020.6.90262
   }
   - {
     name: golang.go-nightly,
-    path: golang.go-nightly-2020.4.2309
+    path: golang.go-nightly-2020.6.2614
   }
   - {
     name: marp-team.marp-vscode,
-    path: marp-team.marp-vscode-0.13.0
+    path: marp-team.marp-vscode-0.14.0
   }
